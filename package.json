@@ -1,17 +1,40 @@
 {
-    "buildNpmdoc":"phantomjs-prebuilt",
+    "author": "kai zhu <kaizhu256@gmail.com>",
+    "buildNpmdoc": "phantomjs-prebuilt",
+    "description": "api documentation for [phantomjs-prebuilt (v2.1.14)](https://github.com/Medium/phantomjs) [![npm package](https://img.shields.io/npm/v/npmdoc-phantomjs-prebuilt.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-phantomjs-prebuilt) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-phantomjs-prebuilt.svg)](https://travis-ci.org/npmdoc/node-npmdoc-phantomjs-prebuilt)",
     "devDependencies": {
-        "phantomjs-prebuilt": "*",
         "electron-lite": "kaizhu256/node-electron-lite#alpha",
+        "phantomjs-prebuilt": "*",
         "utility2": "kaizhu256/node-utility2#alpha"
     },
-    "name":"npmdoc-phantomjs-prebuilt",
+    "engines": {
+        "node": ">=4.0"
+    },
+    "homepage": "https://github.com/npmdoc/node-npmdoc-phantomjs-prebuilt",
+    "keywords": [
+        "documentation",
+        "phantomjs-prebuilt"
+    ],
+    "license": "MIT",
+    "main": "lib.npmdoc_phantomjs_prebuilt.js",
+    "name": "npmdoc-phantomjs-prebuilt",
+    "nameAlias": "npmdoc_phantomjs_prebuilt",
+    "nameOriginal": "npmdoc-phantomjs-prebuilt",
+    "os": [
+        "darwin",
+        "linux"
+    ],
     "repository": {
         "type": "git",
         "url": "https://github.com/npmdoc/node-npmdoc-phantomjs-prebuilt.git"
     },
     "scripts": {
-        "build-ci": "utility2 shReadmeTest build_ci.sh"
+        "build-ci": "utility2 shReadmeTest build_ci.sh",
+        "env": "env",
+        "heroku-postbuild": "(set -e; npm install \"kaizhu256/node-utility2#alpha\"; utility2 shDeployHeroku)",
+        "postinstall": "if [ -f npm_scripts.sh ]; then ./npm_scripts.sh postinstall; fi",
+        "start": "(set -e; export PORT=${PORT:-8080}; utility2 start test.js)",
+        "test": "(set -e; export PORT=$(utility2 shServerPortRandom); utility2 test test.js)"
     },
     "version": "0.0.1"
 }
