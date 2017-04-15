@@ -1,4 +1,4 @@
-<div class="apidocDiv">
+<html><head></head><body><div class="apidocDiv">
 <style>
 /*csslint
 */
@@ -47,17 +47,10 @@
 }
 </style>
 <h1>api documentation for
-    <a
-
-        href="https://github.com/Medium/phantomjs"
-
-    >phantomjs-prebuilt (v2.1.14)</a>
+    <a href="https://github.com/Medium/phantomjs">phantomjs-prebuilt (v2.1.14)</a>
 </h1>
 <h4>Headless WebKit with JS API</h4>
-<div class="apidocSectionDiv"><a
-    href="#apidoc.tableOfContents"
-    id="apidoc.tableOfContents"
-><h1>table of contents</h1></a><ol>
+<div class="apidocSectionDiv"><a href="#apidoc.tableOfContents" id="apidoc.tableOfContents"><h1>table of contents</h1></a><ol>
 
     <li class="apidocModuleLi"><a href="#apidoc.module.phantomjs-prebuilt">module phantomjs-prebuilt</a><ol>
 
@@ -129,10 +122,10 @@
     <ul>
     <li>description and source-code<pre class="apidocCodePre">cleanPath = function (path) {
   return path
-      .replace(/:[^:]*node_modules[^:]*/g, &#x27;&#x27;)
-      .replace(/(^|:)\.\/bin(\:|$)/g, &#x27;:&#x27;)
-      .replace(/^:+/, &#x27;&#x27;)
-      .replace(/:+$/, &#x27;&#x27;)
+      .replace(/:[^:]*node_modules[^:]*/g, '')
+      .replace(/(^|:)\.\/bin(\:|$)/g, ':')
+      .replace(/^:+/, '')
+      .replace(/:+$/, '')
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
     </ul>
@@ -157,12 +150,12 @@
 Or `exec()` method is also provided for convenience:
 
 ```javascript
-var phantomjs = require(&#x27;phantomjs-prebuilt&#x27;)
-var program = phantomjs.<span class="apidocCodeKeywordSpan">exec</span>(&#x27;phantomjs-script.js&#x27;, &#x27;arg1&#x27;, &#x27
-;arg2&#x27;)
+var phantomjs = require('phantomjs-prebuilt')
+var program = phantomjs.<span class="apidocCodeKeywordSpan">exec</span>('phantomjs-script.js', 'arg1', '
+;arg2')
 program.stdout.pipe(process.stdout)
 program.stderr.pipe(process.stderr)
-program.on(&#x27;exit&#x27;, code =&#x3e; {
+program.on('exit', code =&gt; {
   // do something on end
 })
 ```
@@ -184,33 +177,33 @@ program.on(&#x27;exit&#x27;, code =&#x3e; {
     try {
       var program = exports.exec.apply(null, args)
       var isFirst = true
-      var stderr = &#x27;&#x27;
-      program.stdout.on(&#x27;data&#x27;, function () {
+      var stderr = ''
+      program.stdout.on('data', function () {
         // This detects PhantomJS instance get ready.
         if (!isFirst) return
         isFirst = false
         resolve(program)
       })
-      program.stderr.on(&#x27;data&#x27;, function (data) {
-        stderr = stderr + data.toString(&#x27;utf8&#x27;)
+      program.stderr.on('data', function (data) {
+        stderr = stderr + data.toString('utf8')
       })
-      program.on(&#x27;error&#x27;, function (err) {
+      program.on('error', function (err) {
         if (!isFirst) return
         isFirst = false
         reject(err)
       })
-      program.on(&#x27;exit&#x27;, function (code) {
+      program.on('exit', function (code) {
         if (!isFirst) return
         isFirst = false
         if (code == 0) {
-          // PhantomJS doesn&#x27;t use exit codes correctly :(
-          if (stderr.indexOf(&#x27;Error:&#x27;) == 0) {
+          // PhantomJS doesn't use exit codes correctly :(
+          if (stderr.indexOf('Error:') == 0) {
             reject(new Error(stderr))
           } else {
             resolve(program)
           }
         } else {
-          reject(new Error(&#x27;Exit code: &#x27; + code))
+          reject(new Error('Exit code: ' + code))
         }
       })
     } catch (err) {
@@ -219,18 +212,18 @@ program.on(&#x27;exit&#x27;, code =&#x3e; {
   })
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
-`run()` method detects when PhantomJS gets ready. It&#x27;s handy to use with WebDriver (Selenium).
+`run()` method detects when PhantomJS gets ready. It's handy to use with WebDriver (Selenium).
 
 ```javascript
-var phantomjs = require(&#x27;phantomjs-prebuilt&#x27;)
-var webdriverio = require(&#x27;webdriverio&#x27;)
-var wdOpts = { desiredCapabilities: { browserName: &#x27;phantomjs&#x27; } }
+var phantomjs = require('phantomjs-prebuilt')
+var webdriverio = require('webdriverio')
+var wdOpts = { desiredCapabilities: { browserName: 'phantomjs' } }
 
-phantomjs.<span class="apidocCodeKeywordSpan">run</span>(&#x27;--webdriver=4444&#x27;).then(program =&#x3e; {
+phantomjs.<span class="apidocCodeKeywordSpan">run</span>('--webdriver=4444').then(program =&gt; {
   webdriverio.remote(wdOpts).init()
-    .url(&#x27;https://developer.mozilla.org/en-US/&#x27;)
-    .getTitle().then(title =&#x3e; {
-      console.log(title) // &#x27;Mozilla Developer Network&#x27;
+    .url('https://developer.mozilla.org/en-US/')
+    .getTitle().then(title =&gt; {
+      console.log(title) // 'Mozilla Developer Network'
       program.kill() // quits PhantomJS
     })
 })
@@ -254,3 +247,4 @@ phantomjs.<span class="apidocCodeKeywordSpan">run</span>(&#x27;--webdriver=4444&
     ]
 </div>
 </div>
+</body></html>
