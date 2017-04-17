@@ -3,7 +3,9 @@
 
 [![NPM](https://nodei.co/npm/phantomjs-prebuilt.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/phantomjs-prebuilt)
 
-[![apidoc](https://npmdoc.github.io/node-npmdoc-phantomjs-prebuilt/build/screenCapture.buildCi.browser.apidoc.html.png)](https://npmdoc.github.io/node-npmdoc-phantomjs-prebuilt/build/apidoc.html)
+- [https://npmdoc.github.io/node-npmdoc-phantomjs-prebuilt/build/apidoc.html](https://npmdoc.github.io/node-npmdoc-phantomjs-prebuilt/build/apidoc.html)
+
+[![apidoc](https://npmdoc.github.io/node-npmdoc-phantomjs-prebuilt/build/screenCapture.buildCi.browser.%252Ftmp%252Fbuild%252Fapidoc.html.png)](https://npmdoc.github.io/node-npmdoc-phantomjs-prebuilt/build/apidoc.html)
 
 ![npmPackageListing](https://npmdoc.github.io/node-npmdoc-phantomjs-prebuilt/build/screenCapture.npmPackageListing.svg)
 
@@ -80,132 +82,6 @@
     },
     "version": "2.1.14"
 }
-```
-
-
-
-# <a name="apidoc.tableOfContents"></a>[table of contents](#apidoc.tableOfContents)
-
-#### [module phantomjs-prebuilt](#apidoc.module.phantomjs-prebuilt)
-1.  [function <span class="apidocSignatureSpan">phantomjs-prebuilt.</span>cleanPath (path)](#apidoc.element.phantomjs-prebuilt.cleanPath)
-1.  [function <span class="apidocSignatureSpan">phantomjs-prebuilt.</span>exec ()](#apidoc.element.phantomjs-prebuilt.exec)
-1.  [function <span class="apidocSignatureSpan">phantomjs-prebuilt.</span>run ()](#apidoc.element.phantomjs-prebuilt.run)
-1.  string <span class="apidocSignatureSpan">phantomjs-prebuilt.</span>arch
-1.  string <span class="apidocSignatureSpan">phantomjs-prebuilt.</span>path
-1.  string <span class="apidocSignatureSpan">phantomjs-prebuilt.</span>platform
-1.  string <span class="apidocSignatureSpan">phantomjs-prebuilt.</span>version
-
-
-
-# <a name="apidoc.module.phantomjs-prebuilt"></a>[module phantomjs-prebuilt](#apidoc.module.phantomjs-prebuilt)
-
-#### <a name="apidoc.element.phantomjs-prebuilt.cleanPath"></a>[function <span class="apidocSignatureSpan">phantomjs-prebuilt.</span>cleanPath (path)](#apidoc.element.phantomjs-prebuilt.cleanPath)
-- description and source-code
-```javascript
-cleanPath = function (path) {
-  return path
-      .replace(/:[^:]*node_modules[^:]*/g, '')
-      .replace(/(^|:)\.\/bin(\:|$)/g, ':')
-      .replace(/^:+/, '')
-      .replace(/:+$/, '')
-}
-```
-- example usage
-```shell
-n/a
-```
-
-#### <a name="apidoc.element.phantomjs-prebuilt.exec"></a>[function <span class="apidocSignatureSpan">phantomjs-prebuilt.</span>exec ()](#apidoc.element.phantomjs-prebuilt.exec)
-- description and source-code
-```javascript
-exec = function () {
-  var args = Array.prototype.slice.call(arguments)
-  return spawn(exports.path, args)
-}
-```
-- example usage
-```shell
-...
-
-'''
-
-Or 'exec()' method is also provided for convenience:
-
-'''javascript
-var phantomjs = require('phantomjs-prebuilt')
-var program = phantomjs.exec('phantomjs-script.js', 'arg1', 'arg2')
-program.stdout.pipe(process.stdout)
-program.stderr.pipe(process.stderr)
-program.on('exit', code => {
-  // do something on end
-})
-'''
-...
-```
-
-#### <a name="apidoc.element.phantomjs-prebuilt.run"></a>[function <span class="apidocSignatureSpan">phantomjs-prebuilt.</span>run ()](#apidoc.element.phantomjs-prebuilt.run)
-- description and source-code
-```javascript
-run = function () {
-  var args = arguments
-  return new Promise(function (resolve, reject) {
-    try {
-      var program = exports.exec.apply(null, args)
-      var isFirst = true
-      var stderr = ''
-      program.stdout.on('data', function () {
-        // This detects PhantomJS instance get ready.
-        if (!isFirst) return
-        isFirst = false
-        resolve(program)
-      })
-      program.stderr.on('data', function (data) {
-        stderr = stderr + data.toString('utf8')
-      })
-      program.on('error', function (err) {
-        if (!isFirst) return
-        isFirst = false
-        reject(err)
-      })
-      program.on('exit', function (code) {
-        if (!isFirst) return
-        isFirst = false
-        if (code == 0) {
-          // PhantomJS doesn't use exit codes correctly :(
-          if (stderr.indexOf('Error:') == 0) {
-            reject(new Error(stderr))
-          } else {
-            resolve(program)
-          }
-        } else {
-          reject(new Error('Exit code: ' + code))
-        }
-      })
-    } catch (err) {
-      reject(err)
-    }
-  })
-}
-```
-- example usage
-```shell
-...
-'run()' method detects when PhantomJS gets ready. It's handy to use with WebDriver (Selenium).
-
-'''javascript
-var phantomjs = require('phantomjs-prebuilt')
-var webdriverio = require('webdriverio')
-var wdOpts = { desiredCapabilities: { browserName: 'phantomjs' } }
-
-phantomjs.run('--webdriver=4444').then(program => {
-  webdriverio.remote(wdOpts).init()
-    .url('https://developer.mozilla.org/en-US/')
-    .getTitle().then(title => {
-      console.log(title) // 'Mozilla Developer Network'
-      program.kill() // quits PhantomJS
-    })
-})
-...
 ```
 
 
