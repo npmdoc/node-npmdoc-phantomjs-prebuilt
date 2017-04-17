@@ -1,4 +1,4 @@
-<div class="apidocDiv">
+<html><head></head><body><div class="apidocDiv">
 <style>
 /*csslint
 */
@@ -47,17 +47,10 @@
 }
 </style>
 <h1>api documentation for
-    <a
-
-        href="https://github.com/Medium/phantomjs"
-
-    >phantomjs-prebuilt (v2.1.14)</a>
+    <a href="https://github.com/Medium/phantomjs">phantomjs-prebuilt (v2.1.14)</a>
 </h1>
 <h4>Headless WebKit with JS API</h4>
-<div class="apidocSectionDiv"><a
-    href="#apidoc.tableOfContents"
-    id="apidoc.tableOfContents"
-><h1>table of contents</h1></a><ol>
+<div class="apidocSectionDiv"><a href="#apidoc.tableOfContents" id="apidoc.tableOfContents"><h1>table of contents</h1></a><ol>
 
     <li class="apidocModuleLi"><a href="#apidoc.module.phantomjs-prebuilt">module phantomjs-prebuilt</a><ol>
 
@@ -241,10 +234,10 @@
     <ul>
     <li>description and source-code<pre class="apidocCodePre">cleanPath = function (path) {
   return path
-      .replace(/:[^:]*node_modules[^:]*/g, &#x27;&#x27;)
-      .replace(/(^|:)\.\/bin(\:|$)/g, &#x27;:&#x27;)
-      .replace(/^:+/, &#x27;&#x27;)
-      .replace(/:+$/, &#x27;&#x27;)
+      .replace(/:[^:]*node_modules[^:]*/g, '')
+      .replace(/(^|:)\.\/bin(\:|$)/g, ':')
+      .replace(/^:+/, '')
+      .replace(/:+$/, '')
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
     exit(1)
@@ -256,8 +249,8 @@
 // put ./bin on their path
 process.env.PATH = helper.<span class="apidocCodeKeywordSpan">cleanPath</span>(originalPath)
 
-var libPath = path.join(__dirname, &#x27;lib&#x27;)
-var pkgPath = path.join(libPath, &#x27;phantom&#x27;)
+var libPath = path.join(__dirname, 'lib')
+var pkgPath = path.join(libPath, 'phantom')
 var phantomPath = null
 
 // If the user manually installed PhantomJS, we want
@@ -285,12 +278,12 @@ var phantomPath = null
 Or `exec()` method is also provided for convenience:
 
 ```javascript
-var phantomjs = require(&#x27;phantomjs-prebuilt&#x27;)
-var program = phantomjs.<span class="apidocCodeKeywordSpan">exec</span>(&#x27;phantomjs-script.js&#x27;, &#x27;arg1&#x27;, &#x27
-;arg2&#x27;)
+var phantomjs = require('phantomjs-prebuilt')
+var program = phantomjs.<span class="apidocCodeKeywordSpan">exec</span>('phantomjs-script.js', 'arg1', '
+;arg2')
 program.stdout.pipe(process.stdout)
 program.stderr.pipe(process.stderr)
-program.on(&#x27;exit&#x27;, code =&#x3e; {
+program.on('exit', code =&gt; {
   // do something on end
 })
 ```
@@ -312,33 +305,33 @@ program.on(&#x27;exit&#x27;, code =&#x3e; {
     try {
       var program = exports.exec.apply(null, args)
       var isFirst = true
-      var stderr = &#x27;&#x27;
-      program.stdout.on(&#x27;data&#x27;, function () {
+      var stderr = ''
+      program.stdout.on('data', function () {
         // This detects PhantomJS instance get ready.
         if (!isFirst) return
         isFirst = false
         resolve(program)
       })
-      program.stderr.on(&#x27;data&#x27;, function (data) {
-        stderr = stderr + data.toString(&#x27;utf8&#x27;)
+      program.stderr.on('data', function (data) {
+        stderr = stderr + data.toString('utf8')
       })
-      program.on(&#x27;error&#x27;, function (err) {
+      program.on('error', function (err) {
         if (!isFirst) return
         isFirst = false
         reject(err)
       })
-      program.on(&#x27;exit&#x27;, function (code) {
+      program.on('exit', function (code) {
         if (!isFirst) return
         isFirst = false
         if (code == 0) {
-          // PhantomJS doesn&#x27;t use exit codes correctly :(
-          if (stderr.indexOf(&#x27;Error:&#x27;) == 0) {
+          // PhantomJS doesn't use exit codes correctly :(
+          if (stderr.indexOf('Error:') == 0) {
             reject(new Error(stderr))
           } else {
             resolve(program)
           }
         } else {
-          reject(new Error(&#x27;Exit code: &#x27; + code))
+          reject(new Error('Exit code: ' + code))
         }
       })
     } catch (err) {
@@ -347,18 +340,18 @@ program.on(&#x27;exit&#x27;, code =&#x3e; {
   })
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
-`run()` method detects when PhantomJS gets ready. It&#x27;s handy to use with WebDriver (Selenium).
+`run()` method detects when PhantomJS gets ready. It's handy to use with WebDriver (Selenium).
 
 ```javascript
-var phantomjs = require(&#x27;phantomjs-prebuilt&#x27;)
-var webdriverio = require(&#x27;webdriverio&#x27;)
-var wdOpts = { desiredCapabilities: { browserName: &#x27;phantomjs&#x27; } }
+var phantomjs = require('phantomjs-prebuilt')
+var webdriverio = require('webdriverio')
+var wdOpts = { desiredCapabilities: { browserName: 'phantomjs' } }
 
-phantomjs.<span class="apidocCodeKeywordSpan">run</span>(&#x27;--webdriver=4444&#x27;).then(program =&#x3e; {
+phantomjs.<span class="apidocCodeKeywordSpan">run</span>('--webdriver=4444').then(program =&gt; {
   webdriverio.remote(wdOpts).init()
-    .url(&#x27;https://developer.mozilla.org/en-US/&#x27;)
-    .getTitle().then(title =&#x3e; {
-      console.log(title) // &#x27;Mozilla Developer Network&#x27;
+    .url('https://developer.mozilla.org/en-US/')
+    .getTitle().then(title =&gt; {
+      console.log(title) // 'Mozilla Developer Network'
       program.kill() // quits PhantomJS
     })
 })
@@ -391,10 +384,10 @@ phantomjs.<span class="apidocCodeKeywordSpan">run</span>(&#x27;--webdriver=4444&
     <ul>
     <li>description and source-code<pre class="apidocCodePre">cleanPath = function (path) {
   return path
-      .replace(/:[^:]*node_modules[^:]*/g, &#x27;&#x27;)
-      .replace(/(^|:)\.\/bin(\:|$)/g, &#x27;:&#x27;)
-      .replace(/^:+/, &#x27;&#x27;)
-      .replace(/:+$/, &#x27;&#x27;)
+      .replace(/:[^:]*node_modules[^:]*/g, '')
+      .replace(/(^|:)\.\/bin(\:|$)/g, ':')
+      .replace(/^:+/, '')
+      .replace(/:+$/, '')
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
     exit(1)
@@ -406,8 +399,8 @@ phantomjs.<span class="apidocCodeKeywordSpan">run</span>(&#x27;--webdriver=4444&
 // put ./bin on their path
 process.env.PATH = helper.<span class="apidocCodeKeywordSpan">cleanPath</span>(originalPath)
 
-var libPath = path.join(__dirname, &#x27;lib&#x27;)
-var pkgPath = path.join(libPath, &#x27;phantom&#x27;)
+var libPath = path.join(__dirname, 'lib')
+var pkgPath = path.join(libPath, 'phantom')
 var phantomPath = null
 
 // If the user manually installed PhantomJS, we want
@@ -440,12 +433,12 @@ var phantomPath = null
 Or `exec()` method is also provided for convenience:
 
 ```javascript
-var phantomjs = require(&#x27;phantomjs-prebuilt&#x27;)
-var program = phantomjs.<span class="apidocCodeKeywordSpan">exec</span>(&#x27;phantomjs-script.js&#x27;, &#x27;arg1&#x27;, &#x27
-;arg2&#x27;)
+var phantomjs = require('phantomjs-prebuilt')
+var program = phantomjs.<span class="apidocCodeKeywordSpan">exec</span>('phantomjs-script.js', 'arg1', '
+;arg2')
 program.stdout.pipe(process.stdout)
 program.stderr.pipe(process.stderr)
-program.on(&#x27;exit&#x27;, code =&#x3e; {
+program.on('exit', code =&gt; {
   // do something on end
 })
 ```
@@ -472,33 +465,33 @@ program.on(&#x27;exit&#x27;, code =&#x3e; {
     try {
       var program = exports.exec.apply(null, args)
       var isFirst = true
-      var stderr = &#x27;&#x27;
-      program.stdout.on(&#x27;data&#x27;, function () {
+      var stderr = ''
+      program.stdout.on('data', function () {
         // This detects PhantomJS instance get ready.
         if (!isFirst) return
         isFirst = false
         resolve(program)
       })
-      program.stderr.on(&#x27;data&#x27;, function (data) {
-        stderr = stderr + data.toString(&#x27;utf8&#x27;)
+      program.stderr.on('data', function (data) {
+        stderr = stderr + data.toString('utf8')
       })
-      program.on(&#x27;error&#x27;, function (err) {
+      program.on('error', function (err) {
         if (!isFirst) return
         isFirst = false
         reject(err)
       })
-      program.on(&#x27;exit&#x27;, function (code) {
+      program.on('exit', function (code) {
         if (!isFirst) return
         isFirst = false
         if (code == 0) {
-          // PhantomJS doesn&#x27;t use exit codes correctly :(
-          if (stderr.indexOf(&#x27;Error:&#x27;) == 0) {
+          // PhantomJS doesn't use exit codes correctly :(
+          if (stderr.indexOf('Error:') == 0) {
             reject(new Error(stderr))
           } else {
             resolve(program)
           }
         } else {
-          reject(new Error(&#x27;Exit code: &#x27; + code))
+          reject(new Error('Exit code: ' + code))
         }
       })
     } catch (err) {
@@ -507,18 +500,18 @@ program.on(&#x27;exit&#x27;, code =&#x3e; {
   })
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
-`run()` method detects when PhantomJS gets ready. It&#x27;s handy to use with WebDriver (Selenium).
+`run()` method detects when PhantomJS gets ready. It's handy to use with WebDriver (Selenium).
 
 ```javascript
-var phantomjs = require(&#x27;phantomjs-prebuilt&#x27;)
-var webdriverio = require(&#x27;webdriverio&#x27;)
-var wdOpts = { desiredCapabilities: { browserName: &#x27;phantomjs&#x27; } }
+var phantomjs = require('phantomjs-prebuilt')
+var webdriverio = require('webdriverio')
+var wdOpts = { desiredCapabilities: { browserName: 'phantomjs' } }
 
-phantomjs.<span class="apidocCodeKeywordSpan">run</span>(&#x27;--webdriver=4444&#x27;).then(program =&#x3e; {
+phantomjs.<span class="apidocCodeKeywordSpan">run</span>('--webdriver=4444').then(program =&gt; {
   webdriverio.remote(wdOpts).init()
-    .url(&#x27;https://developer.mozilla.org/en-US/&#x27;)
-    .getTitle().then(title =&#x3e; {
-      console.log(title) // &#x27;Mozilla Developer Network&#x27;
+    .url('https://developer.mozilla.org/en-US/')
+    .getTitle().then(title =&gt; {
+      console.log(title) // 'Mozilla Developer Network'
       program.kill() // quits PhantomJS
     })
 })
@@ -540,17 +533,17 @@ phantomjs.<span class="apidocCodeKeywordSpan">run</span>(&#x27;--webdriver=4444&
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function checkPhantomjsVersion(phantomPath) {
-  console.log(&#x27;Found PhantomJS at&#x27;, phantomPath, &#x27;...verifying&#x27;)
-  return kew.nfcall(cp.execFile, phantomPath, [&#x27;--version&#x27;]).then(function (stdout) {
+  console.log('Found PhantomJS at', phantomPath, '...verifying')
+  return kew.nfcall(cp.execFile, phantomPath, ['--version']).then(function (stdout) {
     var version = stdout.trim()
     if (helper.version == version) {
       return true
     } else {
-      console.log(&#x27;PhantomJS detected, but wrong version&#x27;, stdout.trim(), &#x27;@&#x27;, phantomPath + &#x27;.&#x27;)
+      console.log('PhantomJS detected, but wrong version', stdout.trim(), '@', phantomPath + '.')
       return false
     }
   }).fail(function (err) {
-    console.error(&#x27;Error verifying phantomjs, continuing&#x27;, err)
+    console.error('Error verifying phantomjs, continuing', err)
     return false
   })
 }</pre></li>
@@ -569,8 +562,8 @@ phantomjs.<span class="apidocCodeKeywordSpan">run</span>(&#x27;--webdriver=4444&
     <li>description and source-code<pre class="apidocCodePre">function findValidPhantomJsBinary(libPath) {
   return kew.fcall(function () {
     var libModule = require(libPath)
-    if (libModule.location &#x26;&#x26;
-        getTargetPlatform() == libModule.platform &#x26;&#x26;
+    if (libModule.location &amp;&amp;
+        getTargetPlatform() == libModule.platform &amp;&amp;
         getTargetArch() == libModule.arch) {
       var resolvedLocation = path.resolve(path.dirname(libPath), libModule.location)
       if (fs.statSync(resolvedLocation)) {
@@ -602,23 +595,23 @@ phantomjs.<span class="apidocCodeKeywordSpan">run</span>(&#x27;--webdriver=4444&
   var cdnUrl = process.env.npm_config_phantomjs_cdnurl ||
       process.env.PHANTOMJS_CDNURL ||
       DEFAULT_CDN
-  var downloadUrl = cdnUrl + &#x27;/phantomjs-&#x27; + helper.version + &#x27;-&#x27;
-  var checksum = &#x27;&#x27;
+  var downloadUrl = cdnUrl + '/phantomjs-' + helper.version + '-'
+  var checksum = ''
 
   var platform = getTargetPlatform()
   var arch = getTargetArch()
-  if (platform === &#x27;linux&#x27; &#x26;&#x26; arch === &#x27;x64&#x27;) {
-    downloadUrl += &#x27;linux-x86_64.tar.bz2&#x27;
-    checksum = &#x27;86dd9a4bf4aee45f1a84c9f61cf1947c1d6dce9b9e8d2a907105da7852460d2f&#x27;
-  } else if (platform === &#x27;linux&#x27; &#x26;&#x26; arch == &#x27;ia32&#x27;) {
-    downloadUrl += &#x27;linux-i686.tar.bz2&#x27;
-    checksum = &#x27;80e03cfeb22cc4dfe4e73b68ab81c9fdd7c78968cfd5358e6af33960464f15e3&#x27;
-  } else if (platform === &#x27;darwin&#x27;) {
-    downloadUrl += &#x27;macosx.zip&#x27;
-    checksum = &#x27;538cf488219ab27e309eafc629e2bcee9976990fe90b1ec334f541779150f8c1&#x27;
-  } else if (platform === &#x27;win32&#x27;) {
-    downloadUrl += &#x27;windows.zip&#x27;
-    checksum = &#x27;d9fb05623d6b26d3654d008eab3adafd1f6350433dfd16138c46161f42c7dcc8&#x27;
+  if (platform === 'linux' &amp;&amp; arch === 'x64') {
+    downloadUrl += 'linux-x86_64.tar.bz2'
+    checksum = '86dd9a4bf4aee45f1a84c9f61cf1947c1d6dce9b9e8d2a907105da7852460d2f'
+  } else if (platform === 'linux' &amp;&amp; arch == 'ia32') {
+    downloadUrl += 'linux-i686.tar.bz2'
+    checksum = '80e03cfeb22cc4dfe4e73b68ab81c9fdd7c78968cfd5358e6af33960464f15e3'
+  } else if (platform === 'darwin') {
+    downloadUrl += 'macosx.zip'
+    checksum = '538cf488219ab27e309eafc629e2bcee9976990fe90b1ec334f541779150f8c1'
+  } else if (platform === 'win32') {
+    downloadUrl += 'windows.zip'
+    checksum = 'd9fb05623d6b26d3654d008eab3adafd1f6350433dfd16138c46161f42c7dcc8'
   } else {
     return null
   }
@@ -667,16 +660,16 @@ phantomjs.<span class="apidocCodeKeywordSpan">run</span>(&#x27;--webdriver=4444&
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function verifyChecksum(fileName, checksum) {
-  return kew.resolve(hasha.fromFile(fileName, {algorithm: &#x27;sha256&#x27;})).then(function (hash) {
+  return kew.resolve(hasha.fromFile(fileName, {algorithm: 'sha256'})).then(function (hash) {
     var result = checksum == hash
     if (result) {
-      console.log(&#x27;Verified checksum of previously downloaded file&#x27;)
+      console.log('Verified checksum of previously downloaded file')
     } else {
-      console.log(&#x27;Checksum did not match&#x27;)
+      console.log('Checksum did not match')
     }
     return result
   }).fail(function (err) {
-    console.error(&#x27;Failed to verify checksum: &#x27;, err)
+    console.error('Failed to verify checksum: ', err)
     return false
   })
 }</pre></li>
@@ -693,23 +686,23 @@ phantomjs.<span class="apidocCodeKeywordSpan">run</span>(&#x27;--webdriver=4444&
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function writeLocationFile(location) {
-  console.log(&#x27;Writing location.js file&#x27;)
-  if (getTargetPlatform() === &#x27;win32&#x27;) {
-    location = location.replace(/\\/g, &#x27;\\\\&#x27;)
+  console.log('Writing location.js file')
+  if (getTargetPlatform() === 'win32') {
+    location = location.replace(/\\/g, '\\\\')
   }
 
   var platform = getTargetPlatform()
   var arch = getTargetArch()
 
-  var contents = &#x27;module.exports.location = &#x22;&#x27; + location + &#x27;&#x22;\n&#x27;
+  var contents = 'module.exports.location = "' + location + '"\n'
 
-  if (/^[a-zA-Z0-9]*$/.test(platform) &#x26;&#x26; /^[a-zA-Z0-9]*$/.test(arch)) {
+  if (/^[a-zA-Z0-9]*$/.test(platform) &amp;&amp; /^[a-zA-Z0-9]*$/.test(arch)) {
     contents +=
-        &#x27;module.exports.platform = &#x22;&#x27; + getTargetPlatform() + &#x27;&#x22;\n&#x27; +
-        &#x27;module.exports.arch = &#x22;&#x27; + getTargetArch() + &#x27;&#x22;\n&#x27;
+        'module.exports.platform = "' + getTargetPlatform() + '"\n' +
+        'module.exports.arch = "' + getTargetArch() + '"\n'
   }
 
-  fs.writeFileSync(path.join(libPath, &#x27;location.js&#x27;), contents)
+  fs.writeFileSync(path.join(libPath, 'location.js'), contents)
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
     </ul>
@@ -723,3 +716,4 @@ phantomjs.<span class="apidocCodeKeywordSpan">run</span>(&#x27;--webdriver=4444&
     ]
 </div>
 </div>
+</body></html>
