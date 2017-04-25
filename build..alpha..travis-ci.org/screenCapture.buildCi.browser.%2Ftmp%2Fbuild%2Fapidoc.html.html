@@ -113,45 +113,6 @@
 
     </ol></li>
 
-    <li class="apidocModuleLi"><a href="#apidoc.module.phantomjs-prebuilt.cleanPath">module phantomjs-prebuilt.cleanPath</a><ol>
-
-        <li>
-
-            <a class="apidocElementLiA" href="#apidoc.element.phantomjs-prebuilt.cleanPath.cleanPath">
-            function <span class="apidocSignatureSpan">phantomjs-prebuilt.</span>cleanPath
-            <span class="apidocSignatureSpan">(path)</span>
-            </a>
-
-        </li>
-
-    </ol></li>
-
-    <li class="apidocModuleLi"><a href="#apidoc.module.phantomjs-prebuilt.exec">module phantomjs-prebuilt.exec</a><ol>
-
-        <li>
-
-            <a class="apidocElementLiA" href="#apidoc.element.phantomjs-prebuilt.exec.exec">
-            function <span class="apidocSignatureSpan">phantomjs-prebuilt.</span>exec
-            <span class="apidocSignatureSpan">()</span>
-            </a>
-
-        </li>
-
-    </ol></li>
-
-    <li class="apidocModuleLi"><a href="#apidoc.module.phantomjs-prebuilt.run">module phantomjs-prebuilt.run</a><ol>
-
-        <li>
-
-            <a class="apidocElementLiA" href="#apidoc.element.phantomjs-prebuilt.run.run">
-            function <span class="apidocSignatureSpan">phantomjs-prebuilt.</span>run
-            <span class="apidocSignatureSpan">()</span>
-            </a>
-
-        </li>
-
-    </ol></li>
-
     <li class="apidocModuleLi"><a href="#apidoc.module.phantomjs-prebuilt.util">module phantomjs-prebuilt.util</a><ol>
 
         <li>
@@ -372,156 +333,6 @@ phantomjs.<span class="apidocCodeKeywordSpan">run</span>('--webdriver=4444').the
 </div>
 
 <div class="apidocSectionDiv">
-<h1><a href="#apidoc.module.phantomjs-prebuilt.cleanPath" id="apidoc.module.phantomjs-prebuilt.cleanPath">module phantomjs-prebuilt.cleanPath</a></h1>
-
-
-    <h2>
-        <a href="#apidoc.element.phantomjs-prebuilt.cleanPath.cleanPath" id="apidoc.element.phantomjs-prebuilt.cleanPath.cleanPath">
-        function <span class="apidocSignatureSpan">phantomjs-prebuilt.</span>cleanPath
-        <span class="apidocSignatureSpan">(path)</span>
-        </a>
-    </h2>
-    <ul>
-    <li>description and source-code<pre class="apidocCodePre">cleanPath = function (path) {
-  return path
-      .replace(/:[^:]*node_modules[^:]*/g, '')
-      .replace(/(^|:)\.\/bin(\:|$)/g, ':')
-      .replace(/^:+/, '')
-      .replace(/:+$/, '')
-}</pre></li>
-    <li>example usage<pre class="apidocCodePre">...
-    exit(1)
-  }
-})
-
-// NPM adds bin directories to the path, which will cause `which` to find the
-// bin for this package not the actual phantomjs bin.  Also help out people who
-// put ./bin on their path
-process.env.PATH = helper.<span class="apidocCodeKeywordSpan">cleanPath</span>(originalPath)
-
-var libPath = path.join(__dirname, 'lib')
-var pkgPath = path.join(libPath, 'phantom')
-var phantomPath = null
-
-// If the user manually installed PhantomJS, we want
-// to use the existing version.
-...</pre></li>
-    </ul>
-
-
-</div>
-
-<div class="apidocSectionDiv">
-<h1><a href="#apidoc.module.phantomjs-prebuilt.exec" id="apidoc.module.phantomjs-prebuilt.exec">module phantomjs-prebuilt.exec</a></h1>
-
-
-    <h2>
-        <a href="#apidoc.element.phantomjs-prebuilt.exec.exec" id="apidoc.element.phantomjs-prebuilt.exec.exec">
-        function <span class="apidocSignatureSpan">phantomjs-prebuilt.</span>exec
-        <span class="apidocSignatureSpan">()</span>
-        </a>
-    </h2>
-    <ul>
-    <li>description and source-code<pre class="apidocCodePre">exec = function () {
-  var args = Array.prototype.slice.call(arguments)
-  return spawn(exports.path, args)
-}</pre></li>
-    <li>example usage<pre class="apidocCodePre">...
-
-```
-
-Or `exec()` method is also provided for convenience:
-
-```javascript
-var phantomjs = require('phantomjs-prebuilt')
-var program = phantomjs.<span class="apidocCodeKeywordSpan">exec</span>('phantomjs-script.js', 'arg1', '
-;arg2')
-program.stdout.pipe(process.stdout)
-program.stderr.pipe(process.stderr)
-program.on('exit', code =&gt; {
-  // do something on end
-})
-```
-...</pre></li>
-    </ul>
-
-
-</div>
-
-<div class="apidocSectionDiv">
-<h1><a href="#apidoc.module.phantomjs-prebuilt.run" id="apidoc.module.phantomjs-prebuilt.run">module phantomjs-prebuilt.run</a></h1>
-
-
-    <h2>
-        <a href="#apidoc.element.phantomjs-prebuilt.run.run" id="apidoc.element.phantomjs-prebuilt.run.run">
-        function <span class="apidocSignatureSpan">phantomjs-prebuilt.</span>run
-        <span class="apidocSignatureSpan">()</span>
-        </a>
-    </h2>
-    <ul>
-    <li>description and source-code<pre class="apidocCodePre">run = function () {
-  var args = arguments
-  return new Promise(function (resolve, reject) {
-    try {
-      var program = exports.exec.apply(null, args)
-      var isFirst = true
-      var stderr = ''
-      program.stdout.on('data', function () {
-        // This detects PhantomJS instance get ready.
-        if (!isFirst) return
-        isFirst = false
-        resolve(program)
-      })
-      program.stderr.on('data', function (data) {
-        stderr = stderr + data.toString('utf8')
-      })
-      program.on('error', function (err) {
-        if (!isFirst) return
-        isFirst = false
-        reject(err)
-      })
-      program.on('exit', function (code) {
-        if (!isFirst) return
-        isFirst = false
-        if (code == 0) {
-          // PhantomJS doesn't use exit codes correctly :(
-          if (stderr.indexOf('Error:') == 0) {
-            reject(new Error(stderr))
-          } else {
-            resolve(program)
-          }
-        } else {
-          reject(new Error('Exit code: ' + code))
-        }
-      })
-    } catch (err) {
-      reject(err)
-    }
-  })
-}</pre></li>
-    <li>example usage<pre class="apidocCodePre">...
-`run()` method detects when PhantomJS gets ready. It's handy to use with WebDriver (Selenium).
-
-```javascript
-var phantomjs = require('phantomjs-prebuilt')
-var webdriverio = require('webdriverio')
-var wdOpts = { desiredCapabilities: { browserName: 'phantomjs' } }
-
-phantomjs.<span class="apidocCodeKeywordSpan">run</span>('--webdriver=4444').then(program =&gt; {
-  webdriverio.remote(wdOpts).init()
-    .url('https://developer.mozilla.org/en-US/')
-    .getTitle().then(title =&gt; {
-      console.log(title) // 'Mozilla Developer Network'
-      program.kill() // quits PhantomJS
-    })
-})
-...</pre></li>
-    </ul>
-
-
-</div>
-
-<div class="apidocSectionDiv">
 <h1><a href="#apidoc.module.phantomjs-prebuilt.util" id="apidoc.module.phantomjs-prebuilt.util">module phantomjs-prebuilt.util</a></h1>
 
 
@@ -579,7 +390,24 @@ phantomjs.<span class="apidocCodeKeywordSpan">run</span>('--webdriver=4444').the
     return false
   })
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+  test.equal('/usr/bin', phantomjs.cleanPath('./bin:/usr/bin'))
+  test.equal('', phantomjs.cleanPath('./bin'))
+  test.equal('/Work/bin:/usr/bin', phantomjs.cleanPath('/Work/bin:/Work/phantomjs/node_modules/.bin:/usr/bin'
+;))
+  test.done()
+}
+
+exports.testBogusReinstallLocation = function (test) {
+  util.<span class="apidocCodeKeywordSpan">findValidPhantomJsBinary</span>('./blargh')
+  .then(function (binaryLocation) {
+    test.ok(!binaryLocation, 'Expected link to fail')
+    test.done()
+  })
+}
+
+exports.testSuccessfulReinstallLocation = function (test) {
+...</pre></li>
     </ul>
 
 
@@ -673,7 +501,24 @@ phantomjs.<span class="apidocCodeKeywordSpan">run</span>('--webdriver=4444').the
     return false
   })
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+  .then(function (binaryLocation) {
+    test.ok(binaryLocation, 'Expected link to succeed')
+    test.done()
+  })
+}
+
+exports.testBogusVerifyChecksum = function (test) {
+  util.<span class="apidocCodeKeywordSpan">verifyChecksum</span>(path.resolve(__dirname, './exit.js'), 'blargh'
+;)
+  .then(function (success) {
+    test.ok(!success, 'Expected checksum to fail')
+    test.done()
+  })
+}
+
+exports.testSuccessfulVerifyChecksum = function (test) {
+...</pre></li>
     </ul>
 
 
