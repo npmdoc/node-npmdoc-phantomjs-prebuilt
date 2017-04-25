@@ -1,4 +1,7 @@
-# api documentation for  [phantomjs-prebuilt (v2.1.14)](https://github.com/Medium/phantomjs)  [![npm package](https://img.shields.io/npm/v/npmdoc-phantomjs-prebuilt.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-phantomjs-prebuilt) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-phantomjs-prebuilt.svg)](https://travis-ci.org/npmdoc/node-npmdoc-phantomjs-prebuilt)
+# npmdoc-phantomjs-prebuilt
+
+#### basic api documentation for  [phantomjs-prebuilt (v2.1.14)](https://github.com/Medium/phantomjs)  [![npm package](https://img.shields.io/npm/v/npmdoc-phantomjs-prebuilt.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-phantomjs-prebuilt) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-phantomjs-prebuilt.svg)](https://travis-ci.org/npmdoc/node-npmdoc-phantomjs-prebuilt)
+
 #### Headless WebKit with JS API
 
 [![NPM](https://nodei.co/npm/phantomjs-prebuilt.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/phantomjs-prebuilt)
